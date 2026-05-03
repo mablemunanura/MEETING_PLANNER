@@ -124,15 +124,11 @@ public class Calendar {
 		Meeting conflict = new Meeting();
 		
 		for(Meeting toCheck : thatDay){
-			if(!toCheck.getDescription().equals("Day does not exist")){
-				// Does the start time fall between this meeting's start and end times?
-				if(mStart >= toCheck.getStartTime() && mStart <= toCheck.getEndTime()){
+			if(!"Day does not exist".equals(toCheck.getDescription())){
+				if(mStart < toCheck.getEndTime() && mEnd > toCheck.getStartTime()){
 					booked = true;
 					conflict = toCheck;
-					// Does the end time fall between this meeting's start and end times?
-				}else if(mEnd >= toCheck.getStartTime() && mEnd <= toCheck.getEndTime()){
-					booked = true;
-					conflict = toCheck;
+					break;
 				}
 			}
 		}
