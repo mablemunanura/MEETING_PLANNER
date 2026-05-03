@@ -173,4 +173,95 @@ public class PersonTest {
         assertTrue(agenda.indexOf("Morning Meeting") < agenda.indexOf("Afternoon Meeting"));
     }
 
+
+
+    // Trevors tests for checking person availability
+
+    // A person should be available when no meetings exist
+    @Test
+    public void testPersonAvailable_NoMeetings() throws TimeConflictException {
+        Person p = new Person("Trevor");
+
+        boolean available = !p.isBusy(5, 10, 10, 12);
+
+        assertTrue(available);
+    }
+
+    // A person should not be available when an overlapping meeting exists
+    @Test
+    public void testPersonNotAvailable_OverlappingMeeting() throws TimeConflictException {
+        Person p = new Person("Trevor");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        p.addMeeting(m);
+
+        boolean available = !p.isBusy(5, 10, 11, 13);
+
+        assertFalse(available);
+    }
+
+    // A person should be available when a non-overlapping meeting exists
+    @Test
+    public void testPersonAvailable_NonOverlappingMeeting() throws TimeConflictException {
+        Person p = new Person("Trevor");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        p.addMeeting(m);
+
+        boolean available = !p.isBusy(5, 10, 13, 14);
+
+        assertTrue(available);
+    }
+
+    // A person should be available when a meeting exists that ends at the start time of the new meeting
+    @Test
+    public void testPersonAvailable_ExactBoundaryEnd() throws TimeConflictException {
+        Person p = new Person("Trevor");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        p.addMeeting(m);
+
+        // starts exactly when previous ends
+        boolean available = !p.isBusy(5, 10, 12, 14);
+
+        assertTrue(available);
+    }
+
+    // A person should be available when a meeting exists that starts at the end time of the new meeting
+    @Test
+    public void testPersonAvailable_ExactBoundaryStart() throws TimeConflictException {
+        Person p = new Person("Trevor");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        p.addMeeting(m);
+
+        // ends exactly when previous starts
+        boolean available = !p.isBusy(5, 10, 8, 10);
+
+        assertTrue(available);
+    }
+
+    // A person should not be available when an invalid time is provided
+    @Test
+    public void testPersonInvalidTime_ThrowsException() {
+        Person p = new Person("Trevor");
+
+        try {
+            p.isBusy(5, 10, 14, 10);
+            fail("Expected TimeConflictException");
+        } catch (TimeConflictException e) {
+            // expected
+        }
+    }
+
+    // A person should not be available when an invalid date is provided
+    @Test(expected = TimeConflictException.class)
+    public void testPersonInvalidDate_ThrowsException() throws TimeConflictException {
+        Person p = new Person("Trevor");
+        p.isBusy(2, 30, 10, 12); // Feb 30
+    }
+
 }
+
+
+

@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+
 public class RoomTest {
     /*
     Checking availability of a room
@@ -169,6 +170,82 @@ public class RoomTest {
         String agenda = room.printAgenda(5, 4);
 
         assertTrue(agenda.indexOf("Morning Meeting") < agenda.indexOf("Afternoon Meeting"));
+    }
+
+// Trevors tests for checking room availability
+
+    // A room should be available when no meetings exist
+    @Test
+    public void testRoomAvailable_NoMeetings() throws TimeConflictException {
+        Room r = new Room("LAB1");
+
+        boolean available = !r.isBusy(5, 10, 10, 12);
+
+        assertTrue(available);
+    }
+
+    // A room should not be available when an overlapping meeting exists
+    @Test
+    public void testRoomNotAvailable_OverlappingMeeting() throws TimeConflictException {
+        Room r = new Room("LAB1");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        r.addMeeting(m);
+
+        boolean available = !r.isBusy(5, 10, 11, 13);
+
+        assertFalse(available);
+    }
+
+    // A room should be available when a non-overlapping meeting exists
+    @Test
+    public void testRoomAvailable_NonOverlappingMeeting() throws TimeConflictException {
+        Room r = new Room("LAB1");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        r.addMeeting(m);
+
+        boolean available = !r.isBusy(5, 10, 13, 14);
+
+        assertTrue(available);
+    }
+
+    // A room should be available when a meeting exists that ends at the start time of the new meeting
+    @Test
+    public void testRoomBoundaryCondition() throws TimeConflictException {
+        Room r = new Room("LAB1");
+
+        Meeting m = new Meeting(5, 10, 10, 12);
+        r.addMeeting(m);
+
+        boolean available = !r.isBusy(5, 10, 12, 13);
+
+        assertTrue(available);
+    }
+
+    
+    @Test
+    public void testRoomInvalidTime_ThrowsException() {
+        Room r = new Room("LAB1");
+
+        try {
+            r.isBusy(5, 10, 20, 10);
+            fail("Expected TimeConflictException");
+        } catch (TimeConflictException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testRoomInvalidDate_ThrowsException() {
+        Room r = new Room("LAB1");
+
+        try {
+            r.isBusy(2, 31, 10, 12);
+            fail("Expected TimeConflictException");
+        } catch (TimeConflictException e) {
+            // expected
+        }
     }
 
 }
