@@ -6,7 +6,10 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class PersonTest {
-	// Checking availabilty of a person
+    /*
+	    Checking availabilty of a person
+	*/
+
     // should not be busy when no meeting exists for them
     @Test
     public void personShouldNotBeBusyWhenNoMeetingExists() throws TimeConflictException {
@@ -73,4 +76,101 @@ public class PersonTest {
             assertEquals("Meeting starts before it ends.", e.getMessage());
         }
     }
+
+        /*
+	    Printing a person's agenda
+	*/
+
+    //A person with no meetings (should print an empty agenda)
+    @Test
+    public void printAgendaForPersonWithNoMeetings() {
+        Person person = new Person("Ainamani Jim");
+
+        String agenda = person.printAgenda(5, 4);
+
+        assertEquals("Agenda for 5/4:\n", agenda);
+    }
+
+    //A person with one meeting (should print the details of that meeting)
+    @Test
+    public void printAgendaForPersonWithOneMeeting() throws TimeConflictException {
+        Person person = new Person("Ainamani Jim");
+        Room room = new Room("CR1");
+
+        ArrayList<Person> attendees = new ArrayList<Person>();
+        attendees.add(person);
+
+        Meeting meeting = new Meeting(5,4,9,10, attendees, room,"Software Testing Lecture");
+
+        person.addMeeting(meeting);
+
+        String agenda = person.printAgenda(5, 4);
+
+        assertTrue(agenda.contains("Software Testing Lecture") && agenda.contains("CR1") && agenda.contains("9 - 10") && agenda.contains("Ainamani Jim"));
+    }
+
+    // Aperson with more than one meeting (should print the details of all meetings)
+    @Test
+    public void printAgendaForPersonWithMoreThanOneMeeting() throws TimeConflictException {
+        Person person = new Person("Ainamani Jim");
+        Room room = new Room("CR1");
+
+        ArrayList<Person> attendees = new ArrayList<Person>();
+        attendees.add(person);
+
+        Meeting meetingOne = new Meeting(5,4,9,10, attendees, room,"Morning Meeting");
+
+        Meeting meetingTwo = new Meeting(5,4,14,15, attendees, room,"Afternoon Meeting" );
+
+        person.addMeeting(meetingOne);
+        person.addMeeting(meetingTwo);
+
+        String agenda = person.printAgenda(5, 4);
+
+        assertTrue(agenda.contains("Morning Meeting") && agenda.contains("Afternoon Meeting"));
+    }
+
+    // A person with meetings on multiple days (should print the details of all meetings for the month)
+    @Test
+    public void printAgendaForFullMonthForPerson() throws TimeConflictException {
+        Person person = new Person("Ainamani Jim");
+        Room room = new Room("CR1");
+
+        ArrayList<Person> attendees = new ArrayList<Person>();
+        attendees.add(person);
+
+        Meeting meetingOne = new Meeting(5,4,9,10, attendees, room,"First Person Meeting" );
+
+        Meeting meetingTwo = new Meeting(5,10,11,12, attendees, room,"Second Person Meeting");
+
+        person.addMeeting(meetingOne);
+        person.addMeeting(meetingTwo);
+
+        String agenda = person.printAgenda(5);
+
+        assertTrue(agenda.contains("First Person Meeting")
+                && agenda.contains("Second Person Meeting"));
+    }
+
+    //Order of a person's meetings
+    @Test
+    public void checkOrderOfPrintedMeetingsForPerson() throws TimeConflictException {
+        Person person = new Person("Ainamani Jim");
+        Room room = new Room("CR1");
+
+        ArrayList<Person> attendees = new ArrayList<Person>();
+        attendees.add(person);
+
+        Meeting morningMeeting = new Meeting(5,4,8,9,attendees,room,"Morning Meeting" );
+
+        Meeting afternoonMeeting = new Meeting(5,4,14,15, attendees, room,"Afternoon Meeting");
+
+        person.addMeeting(morningMeeting);
+        person.addMeeting(afternoonMeeting);
+
+        String agenda = person.printAgenda(5, 4);
+
+        assertTrue(agenda.indexOf("Morning Meeting") < agenda.indexOf("Afternoon Meeting"));
+    }
+
 }
