@@ -23,4 +23,12 @@ public class CalendarTest {
 			fail("Should not throw exception: " + e.getMessage());
 		}
 	}
+
+	@Test
+	public void testCalendarHacks() throws TimeConflictException {
+		Calendar calendar = new Calendar();
+		// February 30th should already be "Busy" because of the dummy meeting[cite: 2].
+		assertTrue("Feb 30th should be marked busy as it doesn't exist", 
+				calendar.isBusy(2, 30, 0, 23));
+	}
 }

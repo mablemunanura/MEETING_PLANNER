@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Calendar {
 	// Indexed by Month, Day
-	private ArrayList<ArrayList<ArrayList<Meeting>>> occupied;
+	private final ArrayList<ArrayList<ArrayList<Meeting>>> occupied;
 	
 	/**
 	 * Default constructor, builds a calendar and initializes each day
@@ -18,14 +18,14 @@ public class Calendar {
 		 * Times are indexed 0 - 23.
 		 * Need to check bounds when adding a meeting.
 		 */
-		occupied = new ArrayList<ArrayList<ArrayList<Meeting>>>();
+		occupied = new ArrayList<>();
 		
 		for(int i=0;i<=13;i++){
 			// Initialize month
-			occupied.add(new ArrayList<ArrayList<Meeting>>());
+			occupied.add(new ArrayList<>());
 			for(int j=0;j<32;j++){
 				// Initialize days
-				occupied.get(i).add(new ArrayList<Meeting>());
+				occupied.get(i).add(new ArrayList<>());
 			}
 		}
 		
@@ -147,7 +147,7 @@ public class Calendar {
 	 * @param day - The day of the meeting (1-31)
 	 */
 	public void clearSchedule(int month, int day){
-		occupied.get(month).set(day, new ArrayList<Meeting>());
+		occupied.get(month).set(day, new ArrayList<>());
 	}
 	
 	/**
