@@ -59,9 +59,7 @@ public class Calendar {
 		checkTimes(month,day,start,end);
 		
 		for(Meeting toCheck : occupied.get(month).get(day)){
-			if(start >= toCheck.getStartTime() && start <= toCheck.getEndTime()){
-				busy=true;
-			}else if(end >= toCheck.getStartTime() && end <= toCheck.getEndTime()){
+			if(start < toCheck.getEndTime() && end > toCheck.getStartTime()){
 				busy=true;
 			}
 		}
@@ -82,8 +80,14 @@ public class Calendar {
 			throw new TimeConflictException("Day does not exist.");
 		}
 
-		if(mMonth < 1 || mMonth >= 12){
+		if(mMonth < 1 || mMonth > 12){
 			throw new TimeConflictException("Month does not exist.");
+		}
+
+		// Check month-specific days
+		if ((mMonth == 2 && mDay > 28) ||
+		    ((mMonth == 4 || mMonth == 6 || mMonth == 9 || mMonth == 11) && mDay > 30)) {
+			throw new TimeConflictException("Day does not exist.");
 		}
 
 		// Check for illegal times
