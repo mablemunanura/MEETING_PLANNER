@@ -5,18 +5,22 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class RoomTest {
+
     /*
     Checking availability of a room
-    */
+     */
 
     //A room should not be busy when no meeting exists
     @Test
     public void roomShouldNotBeBusyWhenNoMeetingExists() throws TimeConflictException {
         Room room = new Room("CR1");
-        boolean result = room.isBusy(5,4,9,10);
-        assertFalse("The room should not be busy when no meeting exists.",result);
+        boolean result = room.isBusy(5, 4, 9, 10);
+        assertFalse("The room should not be busy when no meeting exists.", result);
     }
 
     //A room should be busy when a meeting already exists
@@ -78,8 +82,7 @@ public class RoomTest {
 
     /*
     Tests for printing a rooms agenda
-    */
-
+     */
     //Room with no meetings (should print an empty agenda)
     @Test
     public void printAgendaForRoomWithNoMeetings() {
@@ -173,7 +176,6 @@ public class RoomTest {
     }
 
 // Trevors tests for checking room availability
-
     // A room should be available when no meetings exist
     @Test
     public void testRoomAvailable_NoMeetings() throws TimeConflictException {
@@ -223,7 +225,6 @@ public class RoomTest {
         assertTrue(available);
     }
 
-    
     @Test
     public void testRoomInvalidTime_ThrowsException() {
         Room r = new Room("LAB1");
