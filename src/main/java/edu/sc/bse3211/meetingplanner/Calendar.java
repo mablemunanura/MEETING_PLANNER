@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Calendar {
 	// Indexed by Month, Day
-	private final ArrayList<ArrayList<ArrayList<Meeting>>> occupied;
+	private ArrayList<ArrayList<ArrayList<Meeting>>> occupied;
 	
 	/**
 	 * Default constructor, builds a calendar and initializes each day
@@ -18,14 +18,14 @@ public class Calendar {
 		 * Times are indexed 0 - 23.
 		 * Need to check bounds when adding a meeting.
 		 */
-		occupied = new ArrayList<>();
+		occupied = new ArrayList<ArrayList<ArrayList<Meeting>>>();
 		
 		for(int i=0;i<=13;i++){
 			// Initialize month
-			occupied.add(new ArrayList<>());
+			occupied.add(new ArrayList<ArrayList<Meeting>>());
 			for(int j=0;j<32;j++){
 				// Initialize days
-				occupied.get(i).add(new ArrayList<>());
+				occupied.get(i).add(new ArrayList<Meeting>());
 			}
 		}
 		
@@ -59,7 +59,9 @@ public class Calendar {
 		checkTimes(month,day,start,end);
 		
 		for(Meeting toCheck : occupied.get(month).get(day)){
-			if(start < toCheck.getEndTime() && end > toCheck.getStartTime()){
+			if(start >= toCheck.getStartTime() && start <= toCheck.getEndTime()){
+				busy=true;
+			}else if(end >= toCheck.getStartTime() && end <= toCheck.getEndTime()){
 				busy=true;
 			}
 		}
@@ -80,14 +82,8 @@ public class Calendar {
 			throw new TimeConflictException("Day does not exist.");
 		}
 
-		if(mMonth < 1 || mMonth > 12){
+		if(mMonth < 1 || mMonth >= 12){
 			throw new TimeConflictException("Month does not exist.");
-		}
-
-		// Check month-specific days
-		if ((mMonth == 2 && mDay > 28) ||
-		    ((mMonth == 4 || mMonth == 6 || mMonth == 9 || mMonth == 11) && mDay > 30)) {
-			throw new TimeConflictException("Day does not exist.");
 		}
 
 		// Check for illegal times
@@ -124,11 +120,15 @@ public class Calendar {
 		Meeting conflict = new Meeting();
 		
 		for(Meeting toCheck : thatDay){
-			if(!"Day does not exist".equals(toCheck.getDescription())){
-				if(mStart < toCheck.getEndTime() && mEnd > toCheck.getStartTime()){
+			if(!toCheck.getDescription().equals("Day does not exist")){
+				// Does the start time fall between this meeting's start and end times?
+				if(mStart >= toCheck.getStartTime() && mStart <= toCheck.getEndTime()){
 					booked = true;
 					conflict = toCheck;
-					break;
+					// Does the end time fall between this meeting's start and end times?
+				}else if(mEnd >= toCheck.getStartTime() && mEnd <= toCheck.getEndTime()){
+					booked = true;
+					conflict = toCheck;
 				}
 			}
 		}
@@ -147,7 +147,7 @@ public class Calendar {
 	 * @param day - The day of the meeting (1-31)
 	 */
 	public void clearSchedule(int month, int day){
-		occupied.get(month).set(day, new ArrayList<>());
+		occupied.get(month).set(day, new ArrayList<Meeting>());
 	}
 	
 	/**
