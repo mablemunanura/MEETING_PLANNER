@@ -6,10 +6,15 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 public class PersonTest {
+
     /*
 	    Checking availabilty of a person
-	*/
+     */
 
     // should not be busy when no meeting exists for them
     @Test
@@ -78,10 +83,9 @@ public class PersonTest {
         }
     }
 
-        /*
+    /*
 	    Printing a person's agenda
-	*/
-
+     */
     //A person with no meetings (should print an empty agenda)
     @Test
     public void printAgendaForPersonWithNoMeetings() {
@@ -101,7 +105,7 @@ public class PersonTest {
         ArrayList<Person> attendees = new ArrayList<Person>();
         attendees.add(person);
 
-        Meeting meeting = new Meeting(5,4,9,10, attendees, room,"Software Testing Lecture");
+        Meeting meeting = new Meeting(5, 4, 9, 10, attendees, room, "Software Testing Lecture");
 
         person.addMeeting(meeting);
 
@@ -119,9 +123,9 @@ public class PersonTest {
         ArrayList<Person> attendees = new ArrayList<Person>();
         attendees.add(person);
 
-        Meeting meetingOne = new Meeting(5,4,9,10, attendees, room,"Morning Meeting");
+        Meeting meetingOne = new Meeting(5, 4, 9, 10, attendees, room, "Morning Meeting");
 
-        Meeting meetingTwo = new Meeting(5,4,14,15, attendees, room,"Afternoon Meeting" );
+        Meeting meetingTwo = new Meeting(5, 4, 14, 15, attendees, room, "Afternoon Meeting");
 
         person.addMeeting(meetingOne);
         person.addMeeting(meetingTwo);
@@ -140,9 +144,9 @@ public class PersonTest {
         ArrayList<Person> attendees = new ArrayList<Person>();
         attendees.add(person);
 
-        Meeting meetingOne = new Meeting(5,4,9,10, attendees, room,"First Person Meeting" );
+        Meeting meetingOne = new Meeting(5, 4, 9, 10, attendees, room, "First Person Meeting");
 
-        Meeting meetingTwo = new Meeting(5,10,11,12, attendees, room,"Second Person Meeting");
+        Meeting meetingTwo = new Meeting(5, 10, 11, 12, attendees, room, "Second Person Meeting");
 
         person.addMeeting(meetingOne);
         person.addMeeting(meetingTwo);
@@ -162,9 +166,9 @@ public class PersonTest {
         ArrayList<Person> attendees = new ArrayList<Person>();
         attendees.add(person);
 
-        Meeting morningMeeting = new Meeting(5,4,8,9,attendees,room,"Morning Meeting" );
+        Meeting morningMeeting = new Meeting(5, 4, 8, 9, attendees, room, "Morning Meeting");
 
-        Meeting afternoonMeeting = new Meeting(5,4,14,15, attendees, room,"Afternoon Meeting");
+        Meeting afternoonMeeting = new Meeting(5, 4, 14, 15, attendees, room, "Afternoon Meeting");
 
         person.addMeeting(morningMeeting);
         person.addMeeting(afternoonMeeting);
@@ -174,10 +178,7 @@ public class PersonTest {
         assertTrue(agenda.indexOf("Morning Meeting") < agenda.indexOf("Afternoon Meeting"));
     }
 
-
-
     // Trevors tests for checking person availability
-
     // A person should be available when no meetings exist
     @Test
     public void testPersonAvailable_NoMeetings() throws TimeConflictException {
@@ -263,6 +264,3 @@ public class PersonTest {
     }
 
 }
-
-
-
